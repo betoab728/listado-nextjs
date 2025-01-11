@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import TaskCard from "./TaskCard";
 
 function ListTasks({ tasks }) {
   return (
@@ -11,16 +12,7 @@ function ListTasks({ tasks }) {
         <ul>
           {tasks.map((task) => (
 
-            <div key={task.id} className="bg-slate-500 p-4 rounded-md mb-2 flex justify-between" >
-                  <div>
-                    <h2 className=" font-bold">{task.title}</h2>
-                    <p className="">{task.description}</p>
-                  </div>
-                  <div className="flex gap-x-2 justify-between">
-                    <button className="bg-indigo-400 text-white rounded-md p-2">Editar</button>
-                    <button className="bg-red-400 text-white rounded-md p-2">Eliminar</button>  
-                  </div>
-            </div>
+           <TaskCard task={task} key={task.id} />
             
           ))}
         </ul>
