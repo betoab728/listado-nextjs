@@ -6,6 +6,7 @@ import ListTasks from "./components/ListTasks";
 function HomePage() {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [taskToEdit, setTaskToEdit] = useState(null); // Estado para la tarea a editar
 
   // Cargar las tareas desde el backend
   const loadTasks = async () => {
@@ -42,7 +43,7 @@ function HomePage() {
     }
   };
 
-  //eliminar una tarea
+  // Eliminar una tarea
   const deleteTask = async (id) => {
     try {
       const url = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -55,20 +56,70 @@ function HomePage() {
     }
   };
 
-  const toggleCompleteTask = (id) => {
-    setTasks((prevTasks) =>
-      prevTasks.map((task) =>
-        task.id === id ? { ...task, completed: !task.completed } : task
-      )
-    );
+  // Actualizar una tarea
+  const updateTask = async (id, updatedTask) => {
+    try {
+      const url = process.env.NEXT_PUBLIC_BACKEND_URL;
+      const response = await fetch(`${url}/api/tasks/${id}/`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedTask),
+      });
+
+      if (response.ok) {
+        const newTaskData = await response.json();
+        setTasks((prevTasks) =>
+          prevTasks.map((task) => (task.id === id ? newTaskData : task))
+        ); // Actualizar el estado con la tarea modificada
+      }
+    } catch (error) {
+      console.error("Error al actualizar la tarea:", error);
+    }
+  };
+
+  const toggleCompleteTask = async (id) => {
+    try {
+      const taskToToggle = tasks.find((task) => task.id === id);
+      if (!taskToToggle) return;
+
+      const updatedTask = { ...taskToToggle, completed: !taskToToggle.completed };
+      await updateTask(id, updatedTask);
+    } catch (error) {
+      console.error("Error al alternar el estado de la tarea:", error);
+    }
+  };
+
+  // Función para seleccionar una tarea para editar
+  const handleEditTask = (task) => {
+    setTaskToEdit(task);
+  };
+
+  // Función para limpiar el estado de tarea a editar
+  const clearTaskToEdit = () => {
+    setTaskToEdit(null);
   };
 
   return (
     <div className="container mx-auto p-4">
-      <h1>Home Page</h1>
+      <h1 className="text-2xl font-bold mb-4">Gestor de Tareas</h1>
       <div className="flex gap-x-10">
-        <FormTasks addTask={addTask} />
-        {loading ? <p>Cargando tareas...</p> : <ListTasks tasks={tasks} deleteTask={deleteTask} toggleCompleteTask={toggleCompleteTask} />}
+        <FormTasks
+          addTask={addTask}
+          updateTask={updateTask}
+          taskToEdit={taskToEdit}
+          clearTaskToEdit={clearTaskToEdit}
+        />
+        {loading ? (
+          <p>Cargando tareas...</p>
+        ) : (
+          <ListTasks
+            tasks={tasks}
+            deleteTask={deleteTask}
+            updateTask={updateTask}
+            toggleCompleteTask={toggleCompleteTask}
+            handleEditTask={handleEditTask} // Pasa la función de edición a ListTasks
+          />
+        )}
       </div>
     </div>
   );

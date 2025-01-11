@@ -1,8 +1,7 @@
 "use client";
 import React from "react";
 import TaskCard from "./TaskCard";
-
-function ListTasks({ tasks, deleteTask, toggleCompleteTask  }) {
+function ListTasks({ tasks, deleteTask, toggleCompleteTask, handleEditTask }) {
   return (
     <div className="bg-slate-200 p-10 m-2 rounded-md w-full">
       <h2 className="text-black font-bold">Lista de Tareas</h2>
@@ -11,9 +10,13 @@ function ListTasks({ tasks, deleteTask, toggleCompleteTask  }) {
       ) : (
         <ul>
           {tasks.map((task) => (
-
-           <TaskCard task={task} key={task.id}  deleteTask={deleteTask} toggleCompleteTask={toggleCompleteTask}  />
-            
+            <TaskCard
+              task={task}
+              key={task.id}
+              deleteTask={deleteTask}
+              toggleCompleteTask={toggleCompleteTask}
+              handleEditTask={handleEditTask} // Pasa la función de edición
+            />
           ))}
         </ul>
       )}
