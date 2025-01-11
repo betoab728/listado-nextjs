@@ -55,12 +55,20 @@ function HomePage() {
     }
   };
 
+  const toggleCompleteTask = (id) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === id ? { ...task, completed: !task.completed } : task
+      )
+    );
+  };
+
   return (
     <div className="container mx-auto p-4">
       <h1>Home Page</h1>
       <div className="flex gap-x-10">
         <FormTasks addTask={addTask} />
-        {loading ? <p>Cargando tareas...</p> : <ListTasks tasks={tasks} deleteTask={deleteTask} />}
+        {loading ? <p>Cargando tareas...</p> : <ListTasks tasks={tasks} deleteTask={deleteTask} toggleCompleteTask={toggleCompleteTask} />}
       </div>
     </div>
   );
