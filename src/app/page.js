@@ -42,12 +42,25 @@ function HomePage() {
     }
   };
 
+  //eliminar una tarea
+  const deleteTask = async (id) => {
+    try {
+      const url = process.env.NEXT_PUBLIC_BACKEND_URL;
+      await fetch(`${url}/api/tasks/${id}/`, {
+        method: "DELETE",
+      });
+      setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id)); // Actualizar el estado eliminando la tarea
+    } catch (error) {
+      console.error("Error al eliminar la tarea:", error);
+    }
+  };
+
   return (
     <div className="container mx-auto p-4">
       <h1>Home Page</h1>
       <div className="flex gap-x-10">
         <FormTasks addTask={addTask} />
-        {loading ? <p>Cargando tareas...</p> : <ListTasks tasks={tasks} />}
+        {loading ? <p>Cargando tareas...</p> : <ListTasks tasks={tasks} deleteTask={deleteTask} />}
       </div>
     </div>
   );

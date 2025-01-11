@@ -2,7 +2,7 @@
 import React from "react";
 import TaskCard from "./TaskCard";
 
-function ListTasks({ tasks }) {
+function ListTasks({ tasks, deleteTask }) {
   return (
     <div className="bg-slate-200 p-10 m-2 rounded-md w-full">
       <h2 className="text-black font-bold">Lista de Tareas</h2>
@@ -12,7 +12,7 @@ function ListTasks({ tasks }) {
         <ul>
           {tasks.map((task) => (
 
-           <TaskCard task={task} key={task.id} />
+           <TaskCard task={task} key={task.id}  deleteTask={deleteTask}/>
             
           ))}
         </ul>

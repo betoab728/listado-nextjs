@@ -1,7 +1,8 @@
 import React from 'react'
 
 
-function TaskCard({ task }) {
+function TaskCard({ task,deleteTask }) {
+
   return (
     <div className="bg-slate-500 p-4 rounded-md mb-2 flex justify-between" >
     <div>
@@ -10,7 +11,9 @@ function TaskCard({ task }) {
     </div>
     <div className="flex gap-x-2 justify-between">
       <button className="bg-indigo-400 text-white rounded-md p-2">Editar</button>
-      <button className="bg-red-400 text-white rounded-md p-2">Eliminar</button>  
+      <button className="bg-red-400 text-white rounded-md p-2"
+      onClick={()=>deleteTask(task.id)}
+      >Eliminar</button>  
     </div>
 </div>
   )
